@@ -1,9 +1,21 @@
-#one {
+#zero {
     border: 2px solid;
     width: 100px;
     height: 100px;
     border-top-color: white;
     border-left-color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 77px;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+#one {
+    border: 2px solid;
+    width: 100px;
+    height: 100px;
+    border-top-color: white;
     cursor: pointer;
     text-align: center;
     font-size: 77px;
@@ -16,6 +28,7 @@
     width: 100px;
     height: 100px;
     border-top-color: white;
+    border-right-color: white;
     cursor: pointer;
     text-align: center;
     font-size: 77px;
@@ -27,8 +40,7 @@
     border: 2px solid;
     width: 100px;
     height: 100px;
-    border-top-color: white;
-    border-right-color: white;
+    border-left-color: white;
     cursor: pointer;
     text-align: center;
     font-size: 77px;
@@ -40,7 +52,6 @@
     border: 2px solid;
     width: 100px;
     height: 100px;
-    border-left-color: white;
     cursor: pointer;
     text-align: center;
     font-size: 77px;
@@ -52,17 +63,6 @@
     border: 2px solid;
     width: 100px;
     height: 100px;
-    cursor: pointer;
-    text-align: center;
-    font-size: 77px;
-    font-family: Arial, Helvetica, sans-serif;
-
-}
-
-#six {
-    border: 2px solid;
-    width: 100px;
-    height: 100px;
     border-right-color: white;
     cursor: pointer;
     text-align: center;
@@ -71,7 +71,7 @@
 
 }
 
-#seven {
+#six {
     border: 2px solid;
     width: 100px;
     height: 100px;
@@ -84,7 +84,7 @@
 
 }
 
-#eight {
+#seven {
     border: 2px solid;
     width: 100px;
     height: 100px;
@@ -96,7 +96,7 @@
 
 }
 
-#nine {
+#eight {
     border: 2px solid;
     width: 100px;
     height: 100px;
