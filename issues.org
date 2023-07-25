@@ -1,0 +1,4 @@
+MON JUL 24:
+Result function possibly not returning the proper thing.
+CORRECT, not returning proper thing. Instead of returning the score that would result in making a possible move, it returns the whole board. 
+Might have to remake a lot of functions, or make new similar functions that take new parameters

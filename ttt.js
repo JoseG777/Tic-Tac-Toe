@@ -61,7 +61,7 @@ function playerTurn() {
     }
 }
 
-
+//PLAYER CLICK
 function playerClick(element)
 {   
     let box = element.getAttribute("id")
@@ -78,7 +78,9 @@ function playerClick(element)
         document.getElementById(box).innerHTML = "O"
         document.getElementById("player").innerHTML = "X's turn"
     }
+
     updateBoard()
+
     if(checkWin(turn) === "X" || checkWin(turn) === "O")
     {
         document.getElementById("player").innerHTML = `Player ${turn} wins!`
@@ -150,7 +152,12 @@ function values(player)
     {
         return 0
     }
+    return 0
 }
+
+let test = ["X", "O", "X",
+            "O", "", "O",
+            "X", "X", ""]
 
 function possibleActions(board)
 {
@@ -165,13 +172,22 @@ function possibleActions(board)
     let possiblitiesArray = Array.from(possiblities)
     return possiblitiesArray
 }
+console.log(possibleActions(test))
+test = possibleActions(test)
+console.log(test)
+
+for(let i = 0; i < test.length; i++)
+{
+    console.log(test[i])
+}
 
 function result(board, move)
 {
-    let boardCopy = board
+    let boardCopy = []
+    copyBoard(board, boardCopy)
     if(!possibleActions(board).includes(move))
     {
-        console.log("Not possible")
+        throw new Error("Invalid Move")
     }
     else
     {
@@ -179,6 +195,13 @@ function result(board, move)
     }
     return boardCopy
 }
+
+board = ["X", "O", "X", 
+         "O", "", "O", 
+         "X", "X", ""]
+
+console.log(result(board, 4))
+console.log(result(board, 5))
 
 function minimize(board)
 {   
@@ -191,21 +214,18 @@ function minimize(board)
     {
         return values("O")
     }
-    if(checkWin("O") === "DRAW")
+    if(checkWin(playerTurn()) === "DRAW")
     {
         return values()
     }
-    if(checkWin("X") === "DRAW")
+    let arrayOfPossiblities = possibleActions(board)
+    for(moves in arrayOfPossiblities)
     {
-        return values()
-    }
-    for(moves in possibleActions(board))
-    {
-        optimal = Math.min(optimal, maximize(result(board, moves)))
+        optimal = Math.min(optimal, maximize(result(board, arrayOfPossiblities[moves])))
     }
     return optimal
-
 }
+console.log(minimize(board))
 
 function maximize(board)
 {   
@@ -218,24 +238,16 @@ function maximize(board)
     {
         return values("O")
     }
-    if(checkWin("O") === "DRAW")
+    if(checkWin(playerTurn()) === "DRAW")
     {
-        return values()
+        return values(playerTurn())
     }
-    if(checkWin("X") === "DRAW")
+    let arrayOfPossiblities = possibleActions(board)
+    for(moves in arrayOfPossiblities)
     {
-        return values()
-    }
-    for(moves in possibleActions(board))
-    {
-        optimal = Math.max(optimal, minimize(result(board, moves)))
+        optimal = Math.max(optimal, minimize(result(board, arrayOfPossiblities[moves])))
     }
     return optimal
-}
-
-for(moves in possibleActions(board))
-{
-    console.log(moves)
 }
 
 function minimax(board)
@@ -249,24 +261,28 @@ function minimax(board)
         let options = []
         for(moves in possibleActions(board))
         {
-            options.push([minimize(result(board, move)), move])
+            options.push([minimize(result(board, moves)), moves])
         }
-        return options
+        options.sort((a, b) => a[0] - b[0])
+        return options[0]
     }
     else if(playerTurn() === "O")
     {
         let options = []
         for(moves in possibleActions(board))
         {
-            options.push([maximize(result(board, move)), move])
+            options.push([maximize(result(board, moves)), moves])
         }
-        return options
+        options.sort((a, b) => b[0] - a[0])
+        return options[0][1]
     }
 }
 
-updateBoard()
-for(let i = 0; i < 9; i++)
+function copyBoard(original, copy)
 {
-    console.log(board[i])
+    for(let i = 0; i < original.length; i++)
+    {
+        copy[i] = original[i]
+    }
 }
 
