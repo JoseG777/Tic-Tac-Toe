@@ -1,4 +1,4 @@
-#zero {
+#box0 {
     border: 2px solid;
     width: 100px;
     height: 100px;
@@ -11,7 +11,7 @@
 
 }
 
-#one {
+#box1 {
     border: 2px solid;
     width: 100px;
     height: 100px;
@@ -23,7 +23,7 @@
 
 }
 
-#two {
+#box2 {
     border: 2px solid;
     width: 100px;
     height: 100px;
@@ -36,7 +36,7 @@
 
 }
 
-#three {
+#box3 {
     border: 2px solid;
     width: 100px;
     height: 100px;
@@ -48,7 +48,7 @@
 
 }
 
-#four {
+#box4 {
     border: 2px solid;
     width: 100px;
     height: 100px;
@@ -59,7 +59,7 @@
 
 }
 
-#five {
+#box5 {
     border: 2px solid;
     width: 100px;
     height: 100px;
@@ -71,7 +71,7 @@
 
 }
 
-#six {
+#box6 {
     border: 2px solid;
     width: 100px;
     height: 100px;
@@ -84,7 +84,7 @@
 
 }
 
-#seven {
+#box7 {
     border: 2px solid;
     width: 100px;
     height: 100px;
@@ -96,7 +96,7 @@
 
 }
 
-#eight {
+#box8 {
     border: 2px solid;
     width: 100px;
     height: 100px;

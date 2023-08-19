@@ -1,7 +1,5 @@
 console.log("Hello, Tic-Tac-Toe!")
 
-Math
-
 let containers = document.getElementsByClassName("container")
 let board = ["", "", "", "", "", "", "", "", ""]
 
@@ -64,32 +62,54 @@ function playerTurn() {
 //PLAYER CLICK
 function playerClick(element)
 {   
+    if(document.getElementById("player").innerHTML != "AI wins!" && document.getElementById("start").hidden === true)
+    {
     let box = element.getAttribute("id")
     if(document.getElementById(box).innerHTML === "")
     {
-    let turn = playerTurn()
-    if(turn === "X")
-    {   
-        document.getElementById(box).innerHTML = "X"
-        document.getElementById("player").innerHTML = "O's turn"
-    }
-    if(turn === "O")
-    {
-        document.getElementById(box).innerHTML = "O"
-        document.getElementById("player").innerHTML = "X's turn"
-    }
+        let turn = playerTurn()
+        if(turn === "X")
+        {   
+            document.getElementById(box).innerHTML = "X"
+            document.getElementById("player").innerHTML = "O's turn"
+        }   
+        if(turn === "O")
+        {
+            document.getElementById(box).innerHTML = "O"
+            document.getElementById("player").innerHTML = "X's turn"
+        }
 
-    updateBoard()
+        updateBoard()
 
-    if(checkWin(turn) === "X" || checkWin(turn) === "O")
-    {
-        document.getElementById("player").innerHTML = `Player ${turn} wins!`
-        return null
-    }
-    if(checkWin(turn) === "DRAW")
-    {
-        document.getElementById("player").innerHTML = "Draw!"
-        return null
+        if(checkWin(turn) === "X" || checkWin(turn) === "O")
+        {
+            document.getElementById("player").innerHTML = `Player ${turn} wins!`
+            return null
+        }
+        if(checkDraw() === true)
+        {
+            document.getElementById("player").innerHTML = "Draw!"
+            return null
+        }
+
+        if (turn === "X") 
+        {
+            let aiMove = minimax(board);
+            document.getElementById(`box${aiMove}`).innerHTML = "O";
+            document.getElementById("player").innerHTML = "X's turn";
+
+            updateBoard();
+
+            if (checkWin("O") === "O") 
+            {
+                document.getElementById("player").innerHTML = "AI wins!";
+            } 
+            else if (checkDraw()) 
+            {
+                document.getElementById("player").innerHTML = "Draw!";
+            }
+        }
+        
     }
     }
 }
@@ -118,11 +138,6 @@ function checkWin(player)
     {
         return player
     }
-    if(checkDraw())
-    {
-        return "DRAW"
-    }
-    return null
 }
 
 function checkDraw()
@@ -134,34 +149,116 @@ function checkDraw()
             return false
         }
     }
-    return true
+    if(checkWin("X") != "X" && checkWin("O") != "O")
+    {
+        return true
+    }
 }
 
 //MINIMAX
-function values(player)
+
+//TURN
+function playerTurnAi(board) {
+    let X_count = 0;
+    let O_count = 0;
+    for (let i = 0; i < 9; i++) 
+    {
+    if (board[i] === "X") 
+        {
+            X_count += 1;
+        }
+    if (board[i] === "O") 
+        {
+            O_count += 1;
+        }
+    }
+    if(X_count === 5 && O_count === 4)
+    {
+        return null
+    }
+    if (X_count === O_count) 
+    {
+        return "X"
+    }
+    else
+    {
+        return "O"
+    }
+}
+
+//TERMINAL CONDITIONS
+function checkDrawAi(board)
+{   
+    for(let i = 0; i < 9; i++)
+    {
+        if(board[i] === "")
+        {
+            return false
+        }
+    }
+    if(checkWinAi("X", board) != "X" && checkWinAi("O", board) != "O")
+    {
+        return true
+    }
+    return false
+}
+
+function checkWinAi(player, board)
+{   
+    for(let row = 0; row < 3; row++)
+    {
+        if(board[row * 3] === player && board[row * 3 + 1] === player && board[row * 3 + 2] === player)
+        {
+            return player
+        }
+    }
+    for(let column = 0; column < 3; column++)
+    {
+        if
+        (board[column + 0] === player && board[column + 3] === player && board[column + 6] === player)
+        {
+            return player
+        }
+    }
+    if 
+    ((board[0] === player && board[4] === player && board[8] === player) || 
+    (board[2] === player && board[4] === player && board[6] === player)) 
+    {
+        return player
+    }
+    return null
+}
+
+function terminal(board)
 {
-    if(checkWin(player) === "X")
+    if(checkWinAi("X", board) === "X" || checkWinAi("O", board) === "O"|| checkDrawAi(board))
+    {
+        return true
+    }
+    return false
+}
+
+//MINIMAX
+function values(board)
+{
+    if(checkWinAi("X",board) === "X")
     {
         return 1
     }
-    if(checkWin(player) === "O")
+    if(checkWinAi("O", board) === "O")
     {
         return -1
-    }
-    if(checkWin(player) === "DRAW")
-    {
-        return 0
     }
     return 0
 }
 
-let test = ["X", "O", "X",
-            "O", "", "O",
-            "X", "X", ""]
-
 function possibleActions(board)
 {
     let possiblities = new Set()
+    if(terminal(board))
+    {
+        return []
+    }
     for(let i = 0; i < 9; i++)
     {
         if(board[i] == "")
@@ -172,14 +269,6 @@ function possibleActions(board)
     let possiblitiesArray = Array.from(possiblities)
     return possiblitiesArray
 }
-console.log(possibleActions(test))
-test = possibleActions(test)
-console.log(test)
-
-for(let i = 0; i < test.length; i++)
-{
-    console.log(test[i])
-}
 
 function result(board, move)
 {
@@ -187,94 +276,90 @@ function result(board, move)
     copyBoard(board, boardCopy)
     if(!possibleActions(board).includes(move))
     {
-        throw new Error("Invalid Move")
+        //console.log("NOT POSSIBLE")
+        return null
     }
     else
-    {
-        boardCopy[move] = playerTurn()
+    {   
+        boardCopy[move] = playerTurnAi(board)
     }
     return boardCopy
 }
 
-board = ["X", "O", "X", 
-         "O", "", "O", 
-         "X", "X", ""]
-
-console.log(result(board, 4))
-console.log(result(board, 5))
-
 function minimize(board)
 {   
     let optimal = 2
-    if(checkWin("X") === "X")
+    if(terminal(board))
     {
-        return values("X")
-    }
-    if(checkWin("O") === "O")
-    {
-        return values("O")
-    }
-    if(checkWin(playerTurn()) === "DRAW")
-    {
-        return values()
+        return values(board)
     }
     let arrayOfPossiblities = possibleActions(board)
-    for(moves in arrayOfPossiblities)
-    {
-        optimal = Math.min(optimal, maximize(result(board, arrayOfPossiblities[moves])))
+    for(let moves = 0; moves < arrayOfPossiblities.length; moves++)
+    {   
+        let value = maximize(result(board, arrayOfPossiblities[moves]))
+        optimal = Math.min(optimal, value)
     }
     return optimal
 }
-console.log(minimize(board))
 
 function maximize(board)
 {   
     let optimal = -2
-    if(checkWin("X") === "X")
+    if(terminal(board))
     {
-        return values("X")
+        return values(board)
     }
-    if(checkWin("O") === "O")
-    {
-        return values("O")
-    }
-    if(checkWin(playerTurn()) === "DRAW")
-    {
-        return values(playerTurn())
-    }
+  
     let arrayOfPossiblities = possibleActions(board)
-    for(moves in arrayOfPossiblities)
-    {
-        optimal = Math.max(optimal, minimize(result(board, arrayOfPossiblities[moves])))
+    for(let moves = 0; moves < arrayOfPossiblities.length; moves++)
+    {   
+        let value = minimize(result(board, arrayOfPossiblities[moves]))
+        optimal = Math.max(optimal, value)
     }
     return optimal
 }
 
 function minimax(board)
 {
-    if(checkWin("X") != null || checkWin("O") != null)
+    if (terminal(board))
     {
-        return null
+        return null;
     }
-    else if(playerTurn() === "X")
+    else if (playerTurnAi(board) === "X")
     {
-        let options = []
-        for(moves in possibleActions(board))
+        let max = -2;
+        let bestMove = null;
+        
+        let aop = possibleActions(board);
+        for (let i = 0; i < aop.length; i++)
         {
-            options.push([minimize(result(board, moves)), moves])
+            let move = aop[i];
+            let value = minimize(result(board, move));
+            if (value > max)
+            {
+                max = value;
+                bestMove = move;
+            }
         }
-        options.sort((a, b) => a[0] - b[0])
-        return options[0]
+        return bestMove;
     }
-    else if(playerTurn() === "O")
+    else if (playerTurnAi(board) === "O")
     {
-        let options = []
-        for(moves in possibleActions(board))
+        let min = 2;
+        let bestMove = null;
+        
+        let aop = possibleActions(board);
+        for (let i = 0; i < aop.length; i++)
         {
-            options.push([maximize(result(board, moves)), moves])
+            let move = aop[i];
+            let value = maximize(result(board, move));
+            if (value < min)
+            {
+                min = value;
+                bestMove = move;
+            }
         }
-        options.sort((a, b) => b[0] - a[0])
-        return options[0][1]
+        return bestMove;
     }
 }
 
@@ -285,4 +370,3 @@ function copyBoard(original, copy)
         copy[i] = original[i]
     }
 }
-
