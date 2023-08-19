@@ -376,4 +376,3 @@ function copyBoard(original, copy)
     }
 };
 
-///FOR THE TERMINAL JIFNRWQF[93QUBGQUI]
