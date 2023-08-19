@@ -1,37 +1,37 @@
 console.log("Hello, Tic-Tac-Toe!")
 
-let containers = document.getElementsByClassName("container")
-let board = ["", "", "", "", "", "", "", "", ""]
+let containers = document.getElementsByClassName("container");
+let board = ["", "", "", "", "", "", "", "", ""];
 
 //BEGIN GAME
-document.getElementById("player").hidden = true
-document.getElementById("restart").hidden = true
+document.getElementById("player").hidden = true;
+document.getElementById("restart").hidden = true;
 
 document.getElementById("start").onclick = function()
 {
-    document.getElementById("player").hidden = false
-    document.getElementById("restart").hidden = false
-    document.getElementById("start").hidden = true
-}
+    document.getElementById("player").hidden = false;
+    document.getElementById("restart").hidden = false;
+    document.getElementById("start").hidden = true;
+};
 
 
 document.getElementById("restart").onclick = function()
 {
-    const boxes = document.querySelectorAll('.container')
+    const boxes = document.querySelectorAll('.container');
     boxes.forEach((box) => 
     {
         box.textContent = ""
-    })
-    document.getElementById("player").innerHTML = "X's turn"
+    });
+    document.getElementById("player").innerHTML = "X's turn";
 }
 
 function updateBoard()
 {
     for(let i = 0; i < containers.length; i++)
     {
-        board[i] = containers[i].innerHTML
+        board[i] = containers[i].innerHTML;
     }
-}
+};
 
 //DETERMINE TURNS
 function playerTurn() {
@@ -47,53 +47,58 @@ function playerTurn() {
     }
     if(X_count === 5 && O_count === 4)
     {
-        return null
+        return null;
     }
     if (X_count === O_count) 
     {
-        return "X"
+        return "X";
     }
     else
     {
-        return "O"
+        return "O";
     }
-}
+};
 
 //PLAYER CLICK
 function playerClick(element)
 {   
     if(document.getElementById("player").innerHTML != "AI wins!" && document.getElementById("start").hidden === true)
     {
-    let box = element.getAttribute("id")
+
+    let box = element.getAttribute("id");
+
+    //PLAYER TURN
     if(document.getElementById(box).innerHTML === "")
     {
-        let turn = playerTurn()
+        let turn = playerTurn();
         if(turn === "X")
         {   
-            document.getElementById(box).innerHTML = "X"
-            document.getElementById("player").innerHTML = "O's turn"
+            document.getElementById(box).innerHTML = "X";
+            document.getElementById("player").innerHTML = "O's turn";
         }   
         if(turn === "O")
         {
-            document.getElementById(box).innerHTML = "O"
-            document.getElementById("player").innerHTML = "X's turn"
+            document.getElementById(box).innerHTML = "O";
+            document.getElementById("player").innerHTML = "X's turn";
         }
 
         updateBoard()
 
         if(checkWin(turn) === "X" || checkWin(turn) === "O")
         {
-            document.getElementById("player").innerHTML = `Player ${turn} wins!`
-            return null
+            document.getElementById("player").innerHTML = `Player ${turn} wins!`;
+            return null;
         }
         if(checkDraw() === true)
         {
-            document.getElementById("player").innerHTML = "Draw!"
-            return null
+            document.getElementById("player").innerHTML = "Draw!";
+            return null;
         }
 
+        //AI TURN
         if (turn === "X") 
-        {
+        { 
+            setTimeout(function(){
             let aiMove = minimax(board);
             document.getElementById(`box${aiMove}`).innerHTML = "O";
             document.getElementById("player").innerHTML = "X's turn";
@@ -108,6 +113,7 @@ function playerClick(element)
             {
                 document.getElementById("player").innerHTML = "Draw!";
             }
+            }, 1500);
         }
         
     }
@@ -121,7 +127,7 @@ function checkWin(player)
     {
         if(board[row * 3] === player && board[row * 3 + 1] === player && board[row * 3 + 2] === player)
         {
-            return player
+            return player;
         }
     }
     for(let column = 0; column < 3; column++)
@@ -129,14 +135,14 @@ function checkWin(player)
         if
         (board[column + 0] === player && board[column + 3] === player && board[column + 6] === player)
         {
-            return player
+            return player;
         }
     }
     if 
     ((board[0] === player && board[4] === player && board[8] === player) || 
     (board[2] === player && board[4] === player && board[6] === player)) 
     {
-        return player
+        return player;
     }
 }
 
@@ -146,12 +152,12 @@ function checkDraw()
     {
         if(containers[i].innerHTML === "")
         {
-            return false
+            return false;
         }
     }
     if(checkWin("X") != "X" && checkWin("O") != "O")
     {
-        return true
+        return true;
     }
 }
 
@@ -174,15 +180,15 @@ function playerTurnAi(board) {
     }
     if(X_count === 5 && O_count === 4)
     {
-        return null
+        return null;
     }
     if (X_count === O_count) 
     {
-        return "X"
+        return "X";
     }
     else
     {
-        return "O"
+        return "O";
     }
 }
 
@@ -193,14 +199,14 @@ function checkDrawAi(board)
     {
         if(board[i] === "")
         {
-            return false
+            return false;
         }
     }
     if(checkWinAi("X", board) != "X" && checkWinAi("O", board) != "O")
     {
-        return true
+        return true;
     }
-    return false
+    return false;
 }
 
 function checkWinAi(player, board)
@@ -209,33 +215,32 @@ function checkWinAi(player, board)
     {
         if(board[row * 3] === player && board[row * 3 + 1] === player && board[row * 3 + 2] === player)
         {
-            return player
+            return player;
         }
     }
     for(let column = 0; column < 3; column++)
     {
-        if
-        (board[column + 0] === player && board[column + 3] === player && board[column + 6] === player)
+        if(board[column + 0] === player && board[column + 3] === player && board[column + 6] === player)
         {
-            return player
+            return player;
         }
     }
     if 
     ((board[0] === player && board[4] === player && board[8] === player) || 
     (board[2] === player && board[4] === player && board[6] === player)) 
     {
-        return player
+        return player;
     }
-    return null
-}
+    return null;
+};
 
 function terminal(board)
 {
     if(checkWinAi("X", board) === "X" || checkWinAi("O", board) === "O"|| checkDrawAi(board))
     {
-        return true
+        return true;
     }
-    return false
+    return false;
 }
 
 //MINIMAX
@@ -243,81 +248,81 @@ function values(board)
 {
     if(checkWinAi("X",board) === "X")
     {
-        return 1
+        return 1;
     }
     if(checkWinAi("O", board) === "O")
     {
-        return -1
+        return -1;
     }
-    return 0
-}
+    return 0;
+};
 
 function possibleActions(board)
 {
     let possiblities = new Set()
     if(terminal(board))
     {
-        return []
+        return [];
     }
     for(let i = 0; i < 9; i++)
     {
         if(board[i] == "")
         {
-            possiblities.add(i)
+            possiblities.add(i);
         }
     }
-    let possiblitiesArray = Array.from(possiblities)
-    return possiblitiesArray
-}
+    let possiblitiesArray = Array.from(possiblities);
+    return possiblitiesArray;
+};
 
 function result(board, move)
 {
-    let boardCopy = []
-    copyBoard(board, boardCopy)
+    let boardCopy = [];
+    copyBoard(board, boardCopy);
     if(!possibleActions(board).includes(move))
     {
         //console.log("NOT POSSIBLE")
-        return null
+        return null;
     }
     else
     {   
-        boardCopy[move] = playerTurnAi(board)
+        boardCopy[move] = playerTurnAi(board);
     }
-    return boardCopy
-}
+    return boardCopy;
+};
 
 function minimize(board)
 {   
-    let optimal = 2
+    let optimal = 2;
     if(terminal(board))
     {
-        return values(board)
+        return values(board);
     }
     let arrayOfPossiblities = possibleActions(board)
     for(let moves = 0; moves < arrayOfPossiblities.length; moves++)
     {   
-        let value = maximize(result(board, arrayOfPossiblities[moves]))
-        optimal = Math.min(optimal, value)
+        let value = maximize(result(board, arrayOfPossiblities[moves]));
+        optimal = Math.min(optimal, value);
     }
-    return optimal
+    return optimal;
 }
 
 function maximize(board)
 {   
-    let optimal = -2
+    let optimal = -2;
     if(terminal(board))
     {
-        return values(board)
+        return values(board);
     }
   
     let arrayOfPossiblities = possibleActions(board)
     for(let moves = 0; moves < arrayOfPossiblities.length; moves++)
     {   
-        let value = minimize(result(board, arrayOfPossiblities[moves]))
-        optimal = Math.max(optimal, value)
+        let value = minimize(result(board, arrayOfPossiblities[moves]));
+        optimal = Math.max(optimal, value);
     }
-    return optimal
-}
+    return optimal;
+};
 
 function minimax(board)
 {
@@ -361,12 +366,14 @@ function minimax(board)
         }
         return bestMove;
     }
-}
+};
 
 function copyBoard(original, copy)
 {
     for(let i = 0; i < original.length; i++)
     {
-        copy[i] = original[i]
+        copy[i] = original[i];
     }
-}
+};
+
+///FOR THE TERMINAL JIFNRWQF[93QUBGQUI]
