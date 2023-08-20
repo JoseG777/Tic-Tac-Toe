@@ -376,3 +376,60 @@ function copyBoard(original, copy)
     }
 };
 
+function minimaxDepth(board)
+{
+    if (terminal(board))
+    {
+        return null;
+    }
+    else if (playerTurnAi(board) === "X")
+    {
+        let max = -2;
+        let bestMove = null;
+        let depth = 4;
+        
+        let aop = possibleActions(board);
+
+        for (let i = 0; i < depth; i++)
+        {
+            let move = aop[i];
+            if(move === undefined)
+            {
+                return bestMove;
+            }
+            let value = minimize(result(board, move));
+            if (value > max)
+            {
+                max = value;
+                bestMove = move;
+            }
+        }
+        return bestMove;
+    }
+    else if (playerTurnAi(board) === "O")
+    {
+        let min = 2;
+        let bestMove = null;
+        let depth = 4;
+
+        let aop = possibleActions(board);
+
+        for (let i = 0; i < depth; i++)
+        {
+            let move = aop[i];
+
+            if(move === undefined)
+            {
+                return bestMove;
+            }
+
+            let value = maximize(result(board, move));
+            if (value < min)
+            {
+                min = value;
+                bestMove = move;
+            }
+        }
+        return bestMove;
+    }
+};
