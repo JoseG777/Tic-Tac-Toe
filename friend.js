@@ -24,6 +24,7 @@ document.getElementById("restart").onclick = function()
         box.textContent = ""
     });
     document.getElementById("player").innerHTML = "X's turn";
+    end = false;
 }
 
 function updateBoard()
